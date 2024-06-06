@@ -18,15 +18,6 @@ jobs:
           node-version: 'latest'
           cache: 'npm'
 
-      - name: Install modules
-        run: npm i wrangler@latest
-
-      - name: Build
-        run: npx wrangler build
-
-      - name: Add Header
-        run: cp ${{ github.workspace }}/dist/worker.js ${{ github.workspace }}/dist/worker-original.js && echo -e "/*!\n  * v2ray Subscription Worker (${{ github.sha }})\n  * Copyright 2024 Vahid Farid (https://twitter.com/vahidfarid)\n  * Licensed under GPLv3 (https://github.com/vfarid/v2ray-worker/blob/main/Licence.md)\n  */\n\n$(cat ${{ github.workspace }}/dist/worker.js)" > ${{ github.workspace }}/dist/worker.js
-
       - name: Setup KV Namespaces
         run: sed -i s/KV_NAME/${{ secrets.KV_NAME }}/g wrangler.toml
 
@@ -34,6 +25,3 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      #   with:
-      #     apiToken: ${{ secrets.CF_API_TOKEN }}
-      #     accountId: ${{ secrets.CF_ACCOUNT_ID }}
